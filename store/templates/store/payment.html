@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">Proceed to Payment</h2>
+                </div>
+                <div class="card-body">
+                    <div class="order-summary mb-4">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Order Details</h4>
+                                <p class="mb-1">
+                                    <strong>Product:</strong> {{ order.product.name }}
+                                </p>
+                                <p>
+                                    <strong>Quantity:</strong> {{ order.quantity }}
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <h4>Total Price</h4>
+                                <h3 class="text-primary">${{ total_price }}</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label">Choose Payment Method</label>
+                            <select name="payment_method" id="payment_method" class="form-select" required>
+                                <option value="">Select a payment method</option>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a payment method.
+                            </div>
+                        </div>
+
+                        {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-credit-card me-2"></i>Pay Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Bootstrap form validation script
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    if (form.checkValidity() === false) {
+                        event.stopPropagation();
+                        form.classList.add('was-validated');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    Swal.fire({
+                        title: 'Processing Payment',
+                        text: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Get CSRF token
+                    const csrftoken = getCookie('csrftoken');
+
+                    // Send form data via AJAX
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: data.message,
+                                confirmButtonColor: '#0d6efd'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = data.redirect_url;
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message,
+                                confirmButtonColor: '#0d6efd'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong! Please try again.',
+                            confirmButtonColor: '#0d6efd'
+                        });
+                    });
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

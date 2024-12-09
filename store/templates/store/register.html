@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% load socialaccount %}
+
+{% block extra_css %}
+<style>
+    /* Theme-adaptive styles */
+    .card {
+        background-color: var(--dark-card-bg);
+        border: 1px solid var(--border-color) !important;
+    }
+
+    .card-header {
+        background-color: var(--dark-card-bg);
+    }
+
+    .text-muted {
+        color: var(--text-secondary) !important;
+    }
+
+    .input-group-text {
+        background-color: var(--bg-secondary);
+        border-color: var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .form-control {
+        background-color: var(--bg-secondary);
+        border-color: var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .form-control::placeholder {
+        color: var(--text-secondary);
+    }
+
+    .form-control:focus {
+        background-color: var(--bg-secondary);
+        border-color: var(--primary-color);
+        color: var(--text-primary);
+        box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+    }
+
+    .form-check-label {
+        color: var(--text-primary);
+    }
+
+    .form-check-input {
+        background-color: var(--bg-secondary);
+    }
+
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-outline-danger {
+        background-color: transparent;
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    .alert-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-color: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+    .container{
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card border-0 shadow-lg">
+            <!-- Card Header -->
+            <div class="card-header bg-primary text-white text-center py-4 border-0">
+                <i class="fas fa-user-plus fa-3x mb-3"></i>
+                <h3 class="font-weight-bold">Create Account</h3>
+                <p class="mb-0">Please fill in your information</p>
+            </div>
+
+            <!-- Separator -->
+            <div class="text-center my-3">
+                <span class="text-muted">or</span>
+            </div>
+
+            <!-- Google Login Button -->
+            <div class="card-body px-5 pt-0">
+                <a href="{% provider_login_url 'google' %}" 
+                   class="btn btn-outline-danger w-100 py-2 rounded-pill">
+                    <i class="fab fa-google me-2"></i>Continue with Google
+                </a>
+            </div>
+            
+            <!-- Card Body -->
+            <div class="card-body p-5">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- First Name Input -->
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-opacity-1 border-end-0">
+                                <i class="fas fa-user text-primary"></i>
+                            </span>
+                            <input type="text" 
+                                   name="first_name" 
+                                   id="first_name" 
+                                   class="form-control border-start-0 ps-0" 
+                                   placeholder="First Name"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <!-- Last Name Input -->
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-opacity-1 border-end-0">
+                                <i class="fas fa-user text-primary"></i>
+                            </span>
+                            <input type="text" 
+                                   name="last_name" 
+                                   id="last_name" 
+                                   class="form-control border-start-0 ps-0" 
+                                   placeholder="Last Name"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <!-- Phone Input -->
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-opacity-1 border-end-0">
+                                <i class="fas fa-phone text-primary"></i>
+                            </span>
+                            <input type="text" 
+                                   name="phone" 
+                                   id="phone" 
+                                   class="form-control border-start-0 ps-0" 
+                                   placeholder="Phone Number"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <!-- Email Input -->
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-opacity-1 border-end-0">
+                                <i class="fas fa-envelope text-primary"></i>
+                            </span>
+                            <input type="email" 
+                                   name="email" 
+                                   id="email" 
+                                   class="form-control border-start-0 ps-0" 
+                                   placeholder="Email address"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Input -->
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-opacity-1 border-end-0">
+                                <i class="fas fa-lock text-primary"></i>
+                            </span>
+                            <input type="password" 
+                                   name="password" 
+                                   id="password" 
+                                   class="form-control border-start-0 ps-0" 
+                                   placeholder="Password"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms and Conditions -->
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#" class="text-primary">Terms and Conditions</a>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100 py-2 mb-4 rounded-pill">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </button>
+                    
+                    <!-- Login Link -->
+                    <p class="text-center mb-0">
+                        Already have an account? 
+                        <a href="{% url 'login' %}" class="text-primary text-decoration-none">
+                            Login here
+                        </a>
+                    </p>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Error Message -->
+        {% if error %}
+        <div class="alert alert-danger mt-3 shadow-sm" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

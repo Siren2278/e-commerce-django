@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+    .orders-container {
+        background-color: var(--dark-card-bg);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .orders-header {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px 12px 0 0;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .order-table {
+        background-color: var(--dark-card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .order-table thead {
+        background-color: var(--dark-card-bg);
+    }
+
+    .order-table th, .order-table td {
+        vertical-align: middle;
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .order-product-details {
+        display: flex;
+        align-items: center;
+    }
+
+    .order-product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 1rem;
+    }
+
+    .order-status {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+    }
+
+    .status-completed {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .status-pending {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .payment-btn {
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .payment-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+    }
+
+    .empty-orders {
+        text-align: center;
+        padding: 3rem;
+        background-color: var(--dark-card-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .pagination-container {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .pagination .page-link {
+        color: #007bff;
+        border: 1px solid #dee2e6;
+        margin: 0 2px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        color: #0056b3;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+
+    @media (max-width: 768px) {
+        .order-table {
+            font-size: 0.9rem;
+        }
+
+        .order-product-image {
+            width: 60px;
+            height: 60px;
+        }
+    }
+    @media (max-width: 576px) {
+        .pagination .page-link {
+            padding: 0.4rem 0.7rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="orders-container">
+        <div class="orders-header">
+            <h2 class="mb-0">
+                <i class="fas fa-receipt me-2"></i>Your Orders
+            </h2>
+            <span class="badge bg-light text-primary">{{ orders|length }} Total Orders</span>
+        </div>
+
+        {% if orders %}
+            <div class="table-responsive">
+                <table class="table order-table">
+                    <thead>
+                        <tr>
+                            <th>Product Details</th>
+                            <th>Quantity</th>
+                            <th>Total Price</th>
+                            <th>Delivery Details</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>
+                                    <div class="order-product-details">
+                                        <img src="{{ order.product.image.url }}" 
+                                             alt="{{ order.product.name }}" 
+                                             class="order-product-image">
+                                        <div>
+                                            <strong>{{ order.product.name }}</strong>
+                                            <br>
+                                            <small class="text-muted">Order #{{ order.id }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ order.quantity }}</td>
+                                <td>${{ order.total_price }}</td>
+                                <td>
+                                    <small>
+                                        <strong>Address:</strong> {{ order.address }}<br>
+                                        <strong>Phone:</strong> {{ order.phone }}
+                                    </small>
+                                </td>
+                                <td>
+                                    {% if order.status %}
+                                        <span class="order-status status-completed">
+                                            <i class="fas fa-check-circle me-1"></i>Completed
+                                        </span>
+                                    {% else %}
+                                        <span class="order-status status-pending">
+                                            <i class="fas fa-clock me-1"></i>Pending
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if not order.status %}
+                                        <a href="{% url 'payment' order.id %}" 
+                                           class="btn btn-primary btn-sm payment-btn">
+                                            <i class="fas fa-credit-card me-1"></i>Pay Now
+                                        </a>
+                                    {% else %}
+                                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                                            <i class="fas fa-check me-1"></i>Paid
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-orders">
+                <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+                <h3>No Orders Yet</h3>
+                <p>You haven't placed any orders. Start shopping now!</p>
+                <a href="{% url 'shop' %}" class="btn btn-primary mt-3">
+                    <i class="fas fa-shopping-bag me-2"></i>Shop Now
+                </a>
+            </div>
+        {% endif %}
+        {% if orders.paginator.num_pages > 1 %}
+        <div class="pagination-container mt-4">
+            <nav aria-label="Orders pagination">
+                <ul class="pagination justify-content-center">
+                    {% if orders.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="First">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ orders.previous_page_number }}" aria-label="Previous">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in orders.paginator.page_range %}
+                        {% if orders.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if orders.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ orders.next_page_number }}" aria-label="Next">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ orders.paginator.num_pages }}" aria-label="Last">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <p class="text-center text-muted mt-2">
+                Page {{ orders.number }} of {{ orders.paginator.num_pages }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

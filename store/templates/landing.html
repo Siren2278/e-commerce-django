@@ -1,0 +1,554 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ecommerce - Your Ultimate Shopping Destination</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS (Animate on Scroll) CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --success-color: #4cc9f0;
+            --dark-background: #121212;
+            --dark-card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --navbar-bg: rgba(18, 18, 18, 0.95);
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-background) 0%, #000000 100%);
+            color: var(--text-color);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding-bottom: 60px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Navbar Design */
+        .navbar {
+            background-color: var(--navbar-bg);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 1px 3px 0 rgba(255,255,255,0.1);            
+            padding: 1rem 0;
+            transition: var(--transition);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--text-color) !important;
+        }
+
+        .navbar-brand i {
+            color: var(--accent-color);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255,255,255,0.7) !important;
+            padding: 0.5rem 1rem;
+            margin: 0 0.2rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background-color: rgba(72, 149, 239, 0.1);
+            color: var(--primary-color) !important;
+            transform: translateY(-1px);
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background-image: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(72, 149, 239, 0.1) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(72, 149, 239, 0.1) 100%);
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background-color: var(--dark-card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            transform: translateY(0);
+            
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.2)
+            box-shadow: var(--card-shadow);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Testimonial Section */
+        .testimonial-card {
+            background-color: var(--dark-card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: var(--card-shadow);
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 5rem;
+            color: var(--accent-color);
+            opacity: 0.2;
+        }
+
+        .testimonial-card .customer-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            background-color: var(--dark-card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* Animation Keyframes */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                text-align: center;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--dark-card-bg);
+            color: rgba(255,255,255,0.7);
+            padding: 2rem 0;
+            margin-bottom: -60px;
+        }
+
+        .text-muted {
+            --bs-text-opacity: 1;
+            color: rgb(243 249 255 / 64%) !important;
+        }
+
+        /* Add some AOS-specific styling */
+        [data-aos] {
+            opacity: 0;
+            transition-property: opacity, transform;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'landing-page' %}">
+                <i class="fas fa-shopping-bag"></i> My Ecommerce
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{% url 'shop' %}" class="btn btn-primary btn-lg">
+                            Shop Now <i class="fas fa-shopping-cart ms-2"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" data-aos="fade-up">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 mb-4 floating-icon">
+                        Discover <span class="text-primary">Amazing</span> Products
+                    </h1>
+                    <p class="lead mb-4">
+                        Your one-stop destination for quality products, unbeatable prices, and exceptional shopping experience.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg">
+                            Get Started<i class="fas fa-user-plus ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center d-none d-lg-block">
+                    <i class="fas fa-shopping-bag text-primary" style="font-size: 20rem; opacity: 0.1;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container py-5" data-aos="fade-up" data-aos-delay="200">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-6">Why Choose Us?</h2>
+                <p class="lead text-muted">
+                    Discover the unique advantages of shopping with us
+                </p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <i class="fas fa-truck"></i>
+                    <h4 class="mb-3">Free Shipping</h4>
+                    <p>
+                        Enjoy free shipping on all orders over $50. Fast and reliable delivery guaranteed.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <i class="fas fa-headset"></i>
+                    <h4 class="mb-3">24/7 Support</h4>
+                    <p>
+                        Our dedicated customer support team is always ready to assist you with any queries.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4 class="mb-3">Secure Payments</h4>
+                    <p>
+                        Shop with confidence. We use state-of-the-art encryption to protect your transactions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="container py-5" data-aos="fade-up" data-aos-delay="400">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-6">What Our Customers Say</h2>
+                <p class="lead text-muted">Real stories from satisfied shoppers</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card h-100">
+                    <p class="mb-4">
+                        "Amazing products and incredible customer service! I'll definitely be shopping here again."
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'images/user.png' %}" alt="Customer Image" class="customer-image">
+                        <div>
+                            <h5 class="mb-1">Sarah Johnson</h5>
+                            <p class="text-muted mb-0">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card h-100">
+                    <p class="mb-4">
+                        "The quality of products exceeded my expectations. Fast shipping and great prices!"
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'images/user1.png' %}" alt="Customer Image" class="customer-image">
+                        <div>
+                            <h5 class="mb-1">Michael Lee</h5>
+                            <p class="text-muted mb-0">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card h-100">
+                    <p class="mb-4">
+                        "I love the wide variety of products and the seamless shopping experience!"
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'images/hr.png' %}" alt="Customer Image" class="customer-image">
+                        <div>
+                            <h5 class="mb-1">Emily Rodriguez</h5>
+                            <p class="text-muted mb-0">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="container py-5" data-aos="fade-up" data-aos-delay="600">
+        <div class="newsletter-section text-center">
+            <h2 class="display-6 mb-4">Stay Updated with Our Offers</h2>
+            <p class="lead mb-4">
+                Subscribe to our newsletter and get exclusive deals, product updates, and 10% off your first order!
+            </p>
+            <form class="row g-3 justify-content-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input 
+                            type="email" 
+                            class="form-control form-control-lg" 
+                            placeholder="Enter your email address"
+                            required
+                        >
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary btn-lg px-4"
+                        >
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                    <div class="form-text mt-2">
+                        <i class="fas fa-lock me-1"></i>
+                        We respect your privacy. Unsubscribe at any time.
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Newsletter Benefits -->
+        <div class="row mt-5 g-4 justify-content-center">
+            <div class="col-md-4 col-lg-3">
+                <div class="text-center">
+                    <i class="fas fa-gift text-primary mb-3" style="font-size: 2rem;"></i>
+                    <h5>Exclusive Offers</h5>
+                    <p class="text-muted">Be the first to know about our deals</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <div class="text-center">
+                    <i class="fas fa-tag text-primary mb-3" style="font-size: 2rem;"></i>
+                    <h5>Special Discounts</h5>
+                    <p class="text-muted">Get member-only pricing</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <div class="text-center">
+                    <i class="fas fa-bell text-primary mb-3" style="font-size: 2rem;"></i>
+                    <h5>New Arrivals</h5>
+                    <p class="text-muted">Stay updated with latest products</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container py-5">
+            <div class="row g-4">
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">Contact</h5>
+                    <p class="mb-2">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        123 Shopping Street, Retail City, RC 12345
+                    </p>
+                    <p class="mb-2">
+                        <i class="fas fa-phone me-2"></i>
+                        +1 234 567 8900
+                    </p>
+                    <p class="mb-2">
+                        <i class="fas fa-clock me-2"></i>
+                        10:00 AM - 6:00 PM, Mon - Sat
+                    </p>
+                </div>
+
+                <!-- About Links -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">About</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">About Us</a></li>
+                        <li class="mb-2"><a href="{% url 'orders' %}">Delivery Information</a></li>
+                        <li class="mb-2"><a href="#">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#">Terms & Conditions</a></li>
+                        <li class="mb-2"><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- My Account Links -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">My Account</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{% url 'login' %}">Sign In</a></li>
+                        <li class="mb-2"><a href="{% url 'cart' %}">View Cart</a></li>
+                        <li class="mb-2"><a href="#">My Wishlist</a></li>
+                        <li class="mb-2"><a href="{% url 'orders' %}">Track My Order</a></li>
+                        <li class="mb-2"><a href="#">Help</a></li>
+                    </ul>
+                </div>
+
+                <!-- Install App Section -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">Install App</h5>
+                    <p class="text-white-50 mb-3">Available on App Store and Google Play</p>
+                    <div class="mb-3">
+                        <a href="#" class="me-2 mb-2 d-inline-block">
+                            <img src="{% static 'images/app.jpg' %}" alt="App Store" class="img-fluid rounded">
+                        </a>
+                        <a href="#" class="mb-2 d-inline-block">
+                            <img src="{% static 'images/play.jpg' %}" alt="Google Play" class="img-fluid rounded">
+                        </a>
+                    </div>
+                    <h6 class="text-white mb-3">Secured Payment Gateways</h6>
+                    <div class="payment-icons">
+                        <img src="{% static 'images/pay.png' %}" alt="App Store" class="img-fluid rounded">
+                        {% comment %} <i class="fab fa-cc-visa fa-2x me-2"></i>
+                        <i class="fab fa-cc-mastercard fa-2x me-2"></i>
+                        <i class="fab fa-cc-amex fa-2x me-2"></i>
+                        <i class="fab fa-cc-paypal fa-2x"></i> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media and Copyright -->
+            <div class="row mt-5 pt-4 border-top border-secondary">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="text-white-50 mb-0">
+                        &copy; 2024 My Ecommerce. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-icons">
+                        <a href="#" class="me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Custom JavaScript for Animations and Interactivity -->
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Navbar Background Change on Scroll
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.style.backgroundColor = 'var(--navbar-bg)';
+                    navbar.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+                } else {
+                    navbar.style.backgroundColor = 'transparent';
+                    navbar.style.boxShadow = 'none';
+                }
+            });
+
+            // Newsletter Form Submission Handling
+            const newsletterForm = document.querySelector('form');
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const emailInput = this.querySelector('input[type="email"]');
+                
+                // Basic email validation
+                if (emailInput.value && emailInput.value.includes('@')) {
+                    // You would typically send this to your backend
+                    alert('Thank you for subscribing! You will receive our newsletter soon.');
+                    emailInput.value = ''; // Clear the input
+                } else {
+                    alert('Please enter a valid email address.');
+                }
+            });
+
+            // Feature Cards Animation
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-15px)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+    /* Categories Styling */
+    .categories .list-group-item {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        color: var(--text-primary);
+        backdrop-filter: blur(5px);
+    }
+
+    .categories .list-group-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateX(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border-color: var(--accent-color);
+    }
+
+    .categories .list-group-item a {
+        color: var(--text-primary);
+        font-weight: 500;
+        transition: color 0.3s ease;
+        text-decoration: none;
+        display: block;
+    }
+
+    .categories .list-group-item:hover a {
+        color: var(--accent-color);
+    }
+
+    /* Products Styling */
+    .product.card {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 400px; /* Standardized height */
+        position: relative;
+        backdrop-filter: blur(5px);
+    }
+
+    .product.card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        border-color: var(--accent-color);
+    }
+
+    .product .card-img-top {
+        height: 180px; /* Standardized image height */
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .product:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .product .card-body {
+        padding: 1.5rem;
+        height: calc(100% - 180px); /* Adjusted to match new image height */
+        display: flex;
+        flex-direction: column;
+        background-color: transparent;
+    }
+
+    .product .price-tag {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--dark-surface);
+        color: #4f46e5;
+        {% comment %} color: var(--accent-color); {% endcomment %}
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+
+    .product .card-title {
+        color: var(--text-primary);
+        font-size: 1.1rem; /* Slightly reduced for better fit */
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .product .card-text {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+        line-height: 1.4;
+        font-size: 0.9rem; /* Adjusted for better fit */
+    }
+
+    .product .btn-primary {
+        transition: all 0.3s ease;
+        background-color: var(--accent-color);
+        border: none;
+        padding: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: auto;
+    }
+
+    .product .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(var(--accent-color-rgb), 0.4);
+        background-color: var(--primary-color);
+    }
+
+    /* Page Header Styling */
+    .shop-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: var(--text-primary);
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .shop-header h2 {
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .shop-header .lead {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+        margin-top: 1rem;
+    }
+
+    /* Badge Styling */
+    .badge.bg-primary {
+        background-color: var(--accent-color) !important;
+        color: var(--text-primary);
+        font-weight: 500;
+        padding: 0.5em 0.8em;
+    }
+
+    /* Section Headers */
+    h3 {
+        color: var(--text-primary);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: var(--accent-color);
+        border-radius: 3px;
+    }
+
+    h3 i {
+        color: var(--accent-color);
+        margin-right: 0.5rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .product.card {
+            height: 380px; /* Slightly reduced for mobile */
+        }
+        
+        .product .card-img-top {
+            height: 160px; /* Slightly reduced for mobile */
+        }
+        
+        .shop-header {
+            padding: 2rem 0;
+        }
+        
+        .product .card-body {
+            padding: 1rem;
+            height: calc(100% - 160px);
+        }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row shop-header text-center mb-5">
+        <div class="col-12">
+            <h2 class="display-5">
+                <i class="fas fa-store me-2"></i>Welcome to Our Shop
+            </h2>
+            <p class="lead">Discover our amazing collection of products</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Categories Section -->
+        <div class="col-md-3 mb-4">
+            <div class="categories">
+                <h3>
+                    <i class="fas fa-tags"></i>Categories
+                </h3>
+                <div class="list-group">
+                    {% for category in categories %}
+                        <a href="?category={{ category.id }}" class="list-group-item list-group-item-action">
+                            {{ category.name }}
+                            <span class="badge bg-primary float-end">{{ category.product_count }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="col-md-9">
+            <div class="products">
+                <h3>
+                    <i class="fas fa-shopping-bag"></i>Products
+                </h3>
+                <div class="row g-4">
+                    {% for product in products %}
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="product card">
+                                <div class="price-tag">${{ product.price }}</div>
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                                    <form method="post" action="{% url 'shop' %}" class="mt-auto">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product" value="{{ product.id }}">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

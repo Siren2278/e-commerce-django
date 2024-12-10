@@ -4,7 +4,7 @@
 <style>
     /* Categories Styling */
     .categories .list-group-item {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: var(--bg);
         border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
         margin-bottom: 10px;
@@ -14,7 +14,7 @@
     }
 
     .categories .list-group-item:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: var(--bg);
         transform: translateX(10px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         border-color: var(--accent-color);
@@ -34,7 +34,7 @@
 
     /* Products Styling */
     .product.card {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: var(--bg);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         overflow: hidden;
@@ -66,14 +66,14 @@
         height: calc(100% - 180px); /* Adjusted to match new image height */
         display: flex;
         flex-direction: column;
-        background-color: transparent;
+        background-color: var(--bg);
     }
 
     .product .price-tag {
         position: absolute;
         top: 10px;
         right: 10px;
-        background: var(--dark-surface);
+        background-color: var(--bg);
         color: #4f46e5;
         {% comment %} color: var(--accent-color); {% endcomment %}
         padding: 0.5rem 1rem;

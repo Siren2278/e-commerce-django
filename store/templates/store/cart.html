@@ -3,14 +3,14 @@
 {% block extra_css %}
 <style>
     .cart-container {
-        background-color: var(--dark-card-bg);
+        background-color: var(--card-bg);
         border-radius: 12px;
         padding: 2rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--card-shadow);
     }
 
     .cart-header {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         color: white;
         padding: 1.5rem;
         border-radius: 12px 12px 0 0;
@@ -26,13 +26,14 @@
     }
 
     .cart-table thead {
-        background-color: var(--dark-card-bg);
+        background-color: var(--surface);
     }
 
     .cart-table th, .cart-table td {
         padding: 1rem;
         vertical-align: middle;
-        border-bottom: 1px solid #e9ecef;
+        border-bottom: 1px solid var(--surface);
+        color: var(--text-primary);
     }
 
     .cart-table img {
@@ -50,9 +51,9 @@
     }
 
     .quantity-control button {
-        background-color: #f1f4f8;
-        border: 1px solid #e9ecef;
-        color: #007bff;
+        background-color: var(--surface);
+        border: 1px solid var(--surface);
+        color: var(--primary-color);
         width: 40px;
         height: 40px;
         display: flex;
@@ -62,7 +63,7 @@
     }
 
     .quantity-control button:hover {
-        background-color: #007bff;
+        background-color: var(--primary-color);
         color: white;
     }
 
@@ -70,15 +71,18 @@
         width: 50px;
         text-align: center;
         margin: 0 10px;
-        border: 1px solid #e9ecef;
+        border: 1px solid var(--surface);
         border-radius: 4px;
+        background-color: var(--card-bg);
+        color: var(--text-primary);
     }
 
     .cart-summary {
-        background-color: var(--dark-card-bg);
+        background-color: var(--card-bg);
         border-radius: 12px;
         padding: 1.5rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--card-shadow);
+        color: var(--text-primary);
     }
 
     .checkout-btn {
@@ -104,9 +108,20 @@
     .empty-cart {
         text-align: center;
         padding: 3rem;
-        background-color: var(--dark-card-bg);
+        background-color: var(--card-bg);
         border-radius: 12px;
-        color: #fff;
+        color: var(--text-primary);
+    }
+    .empty-cart p {
+        color: var(--text-secondary);
+    }
+
+    .cart-summary hr {
+        border-color: var(--surface);
+    }
+    .text-muted {
+        --bs-text-opacity: 10;
+        color: var(--bs-primary-color) !important;
     }
 </style>
 {% endblock %}

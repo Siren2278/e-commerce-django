@@ -3,14 +3,14 @@
 {% block extra_css %}
 <style>
     .orders-container {
-        background-color: var(--dark-card-bg);
+        background-color: var(--card-bg);
         border-radius: 12px;
         padding: 2rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--card-shadow);
     }
 
     .orders-header {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         color: white;
         padding: 1.5rem;
         border-radius: 12px 12px 0 0;
@@ -21,20 +21,21 @@
     }
 
     .order-table {
-        background-color: var(--dark-card-bg);
+        background-color: var(--card-bg);
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--card-shadow);
     }
 
     .order-table thead {
-        background-color: var(--dark-card-bg);
+        background-color: var(--surface);
     }
 
     .order-table th, .order-table td {
         vertical-align: middle;
         padding: 1rem;
-        border-bottom: 1px solid #e9ecef;
+        border-bottom: 1px solid var(--surface);
+        color: var(--text-primary);
     }
 
     .order-product-details {
@@ -83,9 +84,14 @@
     .empty-orders {
         text-align: center;
         padding: 3rem;
-        background-color: var(--dark-card-bg);
+        background-color: var(--card-bg);
         border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--card-shadow);
+        color: var(--text-primary);
+    }
+
+    .empty-orders p {
+        color: var(--text-secondary);
     }
 
     .pagination-container {
@@ -95,30 +101,31 @@
     }
 
     .pagination .page-link {
-        color: #007bff;
-        border: 1px solid #dee2e6;
+        color: var(--primary-color);
+        border: 1px solid var(--surface);
+        background-color: var(--card-bg);
+        color: var(--text-primary);
         margin: 0 2px;
         border-radius: 4px;
         transition: all 0.2s ease;
     }
 
     .pagination .page-link:hover {
-        background-color: #e9ecef;
-        border-color: #dee2e6;
-        color: #0056b3;
+        background-color: var(--surface);
+        color: var(--primary-color);
     }
 
     .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        border-color: #007bff;
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
         color: white;
     }
 
     .pagination .page-item.disabled .page-link {
-        color: #6c757d;
+        color: var(--text-secondary);
+        background-color: var(--card-bg);
+        border-color: var(--surface);
         pointer-events: none;
-        background-color: #fff;
-        border-color: #dee2e6;
     }
 
     @media (max-width: 768px) {

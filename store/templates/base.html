@@ -161,20 +161,69 @@
             color: var(--text-secondary);
             padding: 2rem 0;
             margin-bottom: -60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         footer h5 {
             color: var(--text-primary);
+            margin-bottom: 1rem;
         }
-        
+
+        footer h6 {
+            color: var(--text-primary);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        footer ul {
+            padding: 0;
+        }
+
+        footer ul li {
+            margin-bottom: 0.5rem;
+        }
+
         footer a {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: var(--transition);
+            transition: color 0.3s ease;
         }
-        
+
         footer a:hover {
             color: var(--accent-color);
+        }
+
+        /* Social icons */
+        .social-icons a {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Border and copyright */
+        footer .border-top {
+            border-color: rgba(var(--primary-rgb), 0.1) !important;
+        }
+
+        .text-white-50 {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Images in footer */
+        footer .img-fluid {
+            max-width: 120px;
+            border-radius: 8px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        footer .img-fluid:hover {
+            opacity: 1;
         }
         
         /* Form controls */
@@ -280,55 +329,55 @@
         {% endblock %}
     </div>
 
-     <!-- Footer -->
-     <footer class="mt-5">
+    <!--Footer-->
+    <footer class="mt-5">
         <div class="container py-5">
             <div class="row g-4">
                 <!-- Contact Info -->
                 <div class="col-lg-3 col-md-6">
-                    <h5 class="text-white mb-4">Contact</h5>
-                    <p class="mb-2">
+                    <h5>Contact</h5>
+                    <p>
                         <i class="fas fa-map-marker-alt me-2"></i>
                         123 Shopping Street, Retail City, RC 12345
                     </p>
-                    <p class="mb-2">
+                    <p>
                         <i class="fas fa-phone me-2"></i>
                         +1 234 567 8900
                     </p>
-                    <p class="mb-2">
+                    <p>
                         <i class="fas fa-clock me-2"></i>
                         10:00 AM - 6:00 PM, Mon - Sat
                     </p>
                 </div>
-
+    
                 <!-- About Links -->
                 <div class="col-lg-3 col-md-6">
-                    <h5 class="text-white mb-4">About</h5>
+                    <h5>About</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#">About Us</a></li>
-                        <li class="mb-2"><a href="{% url 'orders' %}">Delivery Information</a></li>
-                        <li class="mb-2"><a href="#">Privacy Policy</a></li>
-                        <li class="mb-2"><a href="#">Terms & Conditions</a></li>
-                        <li class="mb-2"><a href="#">Contact Us</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="{% url 'orders' %}">Delivery Information</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Contact Us</a></li>
                     </ul>
                 </div>
-
+    
                 <!-- My Account Links -->
                 <div class="col-lg-3 col-md-6">
-                    <h5 class="text-white mb-4">My Account</h5>
+                    <h5>My Account</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{% url 'login' %}">Sign In</a></li>
-                        <li class="mb-2"><a href="{% url 'cart' %}">View Cart</a></li>
-                        <li class="mb-2"><a href="#">My Wishlist</a></li>
-                        <li class="mb-2"><a href="{% url 'orders' %}">Track My Order</a></li>
-                        <li class="mb-2"><a href="#">Help</a></li>
+                        <li><a href="#">Sign In</a></li>
+                        <li><a href="{% url 'cart' %}">View Cart</a></li>
+                        <li><a href="#">My Wishlist</a></li>
+                        <li><a href="{% url 'orders' %}">Track My Order</a></li>
+                        <li><a href="#">Help</a></li>
                     </ul>
                 </div>
-
+    
                 <!-- Install App Section -->
                 <div class="col-lg-3 col-md-6">
-                    <h5 class="text-white mb-4">Install App</h5>
-                    <p class="text-white-50 mb-3">Available on App Store and Google Play</p>
+                    <h5>Install App</h5>
+                    <p>Available on App Store and Google Play</p>
                     <div class="mb-3">
                         <a href="#" class="me-2 mb-2 d-inline-block">
                             <img src="{% static 'images/app.jpg' %}" alt="App Store" class="img-fluid rounded">
@@ -337,21 +386,17 @@
                             <img src="{% static 'images/play.jpg' %}" alt="Google Play" class="img-fluid rounded">
                         </a>
                     </div>
-                    <h6 class="text-white mb-3">Secured Payment Gateways</h6>
+                    <h6>Secured Payment Gateways</h6>
                     <div class="payment-icons">
-                        <img src="{% static 'images/pay.png' %}" alt="App Store" class="img-fluid rounded">
-                        {% comment %} <i class="fab fa-cc-visa fa-2x me-2"></i>
-                        <i class="fab fa-cc-mastercard fa-2x me-2"></i>
-                        <i class="fab fa-cc-amex fa-2x me-2"></i>
-                        <i class="fab fa-cc-paypal fa-2x"></i> {% endcomment %}
+                        <img src="{% static 'images/pay.png' %}" alt="Payment Methods" class="img-fluid rounded">
                     </div>
                 </div>
             </div>
-
+    
             <!-- Social Media and Copyright -->
-            <div class="row mt-5 pt-4 border-top border-secondary">
+            <div class="row mt-5 pt-4 border-top">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="text-white-50 mb-0">
+                    <p>
                         &copy; 2024 My Ecommerce. All rights reserved.
                     </p>
                 </div>

@@ -21,22 +21,75 @@
 
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --success-color: #4cc9f0;
-            --dark-background: #121212;
+            /* Light theme colors */
+            --light-primary-color: #4361ee;
+            --light-primary-rgb: 79, 70, 229;
+            --light-secondary-color: #3f37c9;
+            --light-accent-color: #4895ef;
+            --light-success-color: #4cc9f0;
+            --light-bg: #ffffff;
+            --light-card-bg: #f8f9fa;
+            --light-surface: #f0f2f5;
+            --light-text-primary: #2d3748;
+            --light-text-secondary: #64748b;
+            --light-navbar-bg: rgba(255, 255, 255, 0.95);
+            --light-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --light-border-color: #e2e8f0;
+        
+            /* Dark theme colors */
+            --dark-primary-color: #4361ee;
+            --dark-primary-rgb: 79, 70, 229;
+            --dark-secondary-color: #3f37c9;
+            --dark-accent-color: #4895ef;
+            --dark-success-color: #4cc9f0;
+            --dark-bg: #121212;
             --dark-card-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --navbar-bg: rgba(18, 18, 18, 0.95);
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --transition: all 0.3s ease;
+            --dark-surface: #242424;
+            --dark-text-primary: #ffffff;
+            --dark-text-secondary: #a0aec0;
+            --dark-navbar-bg: rgba(30, 30, 30, 0.95);
+            --dark-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --dark-border-color: #2d3748;
+        }
+
+        /* Theme-specific styles */
+        [data-theme="light"] {
+            --primary-color: var(--light-primary-color);
+            --primary-rgb: var(--light-primary-rgb);
+            --secondary-color: var(--light-secondary-color);
+            --accent-color: var(--light-accent-color);
+            --success-color: var(--light-success-color);
+            --bg: var(--light-bg);
+            --card-bg: var(--light-card-bg);
+            --surface: var(--light-surface);
+            --text-primary: var(--light-text-primary);
+            --text-secondary: var(--light-text-secondary);
+            --navbar-bg: var(--light-navbar-bg);
+            --card-shadow: var(--light-card-shadow);
+            --border-color: var(--light-border-color);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: var(--dark-primary-color);
+            --primary-rgb: var(--dark-primary-rgb);
+            --secondary-color: var(--dark-secondary-color);
+            --accent-color: var(--dark-accent-color);
+            --success-color: var(--dark-success-color);
+            --bg: var(--dark-bg);
+            --card-bg: var(--dark-card-bg);
+            --surface: var(--dark-surface);
+            --text-primary: var(--dark-text-primary);
+            --text-secondary: var(--dark-text-secondary);
+            --navbar-bg: var(--dark-navbar-bg);
+            --card-shadow: var(--dark-card-shadow);
+            --border-color: var(--dark-border-color);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--dark-background) 0%, #000000 100%);
-            color: var(--text-color);
+            background-color: var(--bg);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
             line-height: 1.7;
             min-height: 100vh;
             padding-bottom: 60px;
@@ -47,6 +100,7 @@
         /* Enhanced Navbar Design */
         .navbar {
             background-color: var(--navbar-bg);
+            border-bottom: 1px solid var(--border-color);
             backdrop-filter: blur(15px);
             box-shadow: 0 1px 3px 0 rgba(255,255,255,0.1);            
             padding: 1rem 0;
@@ -65,7 +119,7 @@
 
         .nav-link {
             font-weight: 500;
-            color: rgba(255,255,255,0.7) !important;
+            color: var(--text-primary) !important;
             padding: 0.5rem 1rem;
             margin: 0 0.2rem;
             border-radius: 8px;
@@ -111,11 +165,13 @@
 
         /* Feature Cards */
         .feature-card {
-            background-color: var(--dark-card-bg);
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
             border-radius: 16px;
             padding: 2rem;
             text-align: center;
-            transition: var(--transition);
             transform: translateY(0);
             
         }
@@ -134,7 +190,10 @@
 
         /* Testimonial Section */
         .testimonial-card {
-            background-color: var(--dark-card-bg);
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
             border-radius: 16px;
             padding: 2rem;
             position: relative;
@@ -161,7 +220,10 @@
 
         /* Newsletter Section */
         .newsletter-section {
-            background-color: var(--dark-card-bg);
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
             border-radius: 16px;
             padding: 3rem;
             box-shadow: var(--card-shadow);
@@ -176,6 +238,31 @@
 
         .floating-icon {
             animation: float 3s ease-in-out infinite;
+        }
+
+        /* Theme toggle button styles */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        * {
+            transition: background-color 0.3s ease, 
+                      color 0.3s ease, 
+                      border-color 0.3s ease, 
+                      box-shadow 0.3s ease;
         }
 
         /* Responsive Adjustments */
@@ -195,7 +282,7 @@
 
         .text-muted {
             --bs-text-opacity: 1;
-            color: rgb(243 249 255 / 64%) !important;
+            color: var(--text-secondary) !important;;
         }
 
         /* Add some AOS-specific styling */
@@ -226,6 +313,11 @@
                         <a href="{% url 'shop' %}" class="btn btn-primary btn-lg">
                             Shop Now <i class="fas fa-shopping-cart ms-2"></i>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="theme-toggle nav-link" id="themeToggle">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -447,7 +539,7 @@
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-white mb-4">My Account</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{% url 'login' %}">Sign In</a></li>
+                        <li class="mb-2"><a href="#">Sign In</a></li>
                         <li class="mb-2"><a href="{% url 'cart' %}">View Cart</a></li>
                         <li class="mb-2"><a href="#">My Wishlist</a></li>
                         <li class="mb-2"><a href="{% url 'orders' %}">Track My Order</a></li>
@@ -509,6 +601,48 @@
             once: true
         });
         document.addEventListener('DOMContentLoaded', function() {
+
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const html = document.documentElement;
+            
+            // Check for saved theme preference or use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            };
+
+            // Apply theme
+            const applyTheme = (theme) => {
+                html.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                updateThemeIcon(theme);
+            };
+
+            // Update icon based on theme
+            const updateThemeIcon = (theme) => {
+                themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+
+            // Initialize theme
+            applyTheme(getPreferredTheme());
+
+            // Toggle theme
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    applyTheme(e.matches ? 'dark' : 'light');
+                }
+            });
 
             // Navbar Background Change on Scroll
             const navbar = document.querySelector('.navbar');

@@ -31,8 +31,31 @@
                         </div>
                     </div>
 
-                    <form method="post" class="needs-validation" novalidate>
+                    <!--Stripe Payment APIs-->
+
+                    {% if error %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ error }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid">
+                        <button id="checkout-button" class="btn btn-primary btn-lg">
+                            <i class="bi bi-credit-card me-2"></i>Pay with Stripe
+                        </button>
+                    </div>
+
+                    <!-- Separator -->
+                    <div class="text-center my-3">
+                        <span class="text-white">or</span>
+                    </div>
+
+                    <form method="post" id="alternative-payment-form" class="needs-validation" novalidate>
                         {% csrf_token %}
+                        <!-- Add hidden input for Stripe checkout session ID -->
+                        <input type="hidden" name="checkout_session_id" value="{{ checkout_session_id }}">
+                    
                         <div class="mb-3">
                             <label for="payment_method" class="form-label">Choose Payment Method</label>
                             <select name="payment_method" id="payment_method" class="form-select" required>
@@ -46,12 +69,12 @@
                             </div>
                         </div>
 
-                        {% if error %}
+                        {% comment %} {% if error %}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 {{ error }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
-                        {% endif %}
+                        {% endif %} {% endcomment %}
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg">
@@ -66,9 +89,101 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://js.stripe.com/v3/"></script>
 <script>
+
+     // Ensure Stripe is loaded before using it
+     document.addEventListener('DOMContentLoaded', function() {
+        // Stripe Checkout Button
+        var stripe = Stripe('{{ stripe_public_key }}');
+        var checkoutButton = document.getElementById('checkout-button');
+        var checkoutSessionId = '{{ checkout_session_id }}';
+
+        checkoutButton.addEventListener('click', function() {
+            if (checkoutSessionId) {
+                stripe.redirectToCheckout({
+                    sessionId: checkoutSessionId
+                }).then(function(result) {
+                    if (result.error) {
+                        console.error(result.error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Stripe Checkout Error',
+                            text: result.error.message
+                        });
+                    }
+                });
+            }
+        });
+
+        // Alternative Payment Form Submission
+        var form = document.getElementById('alternative-payment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            // Show loading state
+            Swal.fire({
+                title: 'Processing Payment',
+                text: 'Please wait...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Send form data via AJAX
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Payment Successful!',
+                        text: data.message,
+                        confirmButtonColor: '#0d6efd'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = data.redirect_url;
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Payment Processing Error',
+                        text: data.message,
+                        confirmButtonColor: '#0d6efd'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again.',
+                    confirmButtonColor: '#0d6efd'
+                });
+            });
+        });
+    });
+
     // Function to get CSRF token from cookies
-    function getCookie(name) {
+    {% comment %} function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
@@ -81,10 +196,10 @@
             }
         }
         return cookieValue;
-    }
+    } {% endcomment %}
 
     // Bootstrap form validation script
-    (function() {
+    {% comment %} (function() {
         'use strict';
         window.addEventListener('load', function() {
             var forms = document.getElementsByClassName('needs-validation');
@@ -126,7 +241,7 @@
                         if (data.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Success!',
+                                title: 'Payment Successful!',
                                 text: data.message,
                                 confirmButtonColor: '#0d6efd'
                             }).then((result) => {
@@ -137,7 +252,7 @@
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Oops...',
+                                title: 'Payment Error',
                                 text: data.message,
                                 confirmButtonColor: '#0d6efd'
                             });
@@ -147,7 +262,7 @@
                         console.error('Error:', error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Oops...',
+                            title: 'Payment Error',
                             text: 'Something went wrong! Please try again.',
                             confirmButtonColor: '#0d6efd'
                         });
@@ -155,6 +270,6 @@
                 }, false);
             });
         }, false);
-    })();
+    })(); {% endcomment %}
 </script>
 {% endblock %}

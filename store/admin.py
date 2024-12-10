@@ -36,12 +36,12 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ('-ordered_at',)  # Default ordering by order date
 
 
-""" # Registering the PasswordResetToken model
+# Registering the PasswordResetToken model
 @admin.register(PasswordResetToken)
 class PasswordResetTokenAdmin(admin.ModelAdmin):
     list_display = ('token', 'customer', 'created_at', 'is_used')  # Columns to display
     search_fields = ('customer__first_name', 'customer__last_name', 'customer__email')  # Searchable fields
     list_filter = ('is_used', 'created_at')  # Filter options
-    ordering = ('-created_at',)  # Default ordering by creation date """
+    ordering = ('-created_at',)  # Default ordering by creation date
 
-admin.site.register(PasswordResetToken)
+# admin.site.register(PasswordResetToken)

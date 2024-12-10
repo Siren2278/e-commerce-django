@@ -13,6 +13,11 @@ import uuid
 from django.utils import timezone
 from django.http import JsonResponse
 from django.core.paginator import Paginator
+import stripe
+from django.conf import settings
+
+# Configure Stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def landing_page(request):
@@ -511,50 +516,134 @@ class PaymentView(View):
     def get(self, request, order_id):
         if not request.session.get('customer'):
             return redirect('login')
+        
         order = get_object_or_404(Order, id=order_id)
         total_price = order.product.price * order.quantity
-        return render(request, 'store/payment.html', {'order': order, 'total_price': total_price})
+        
+        # Create Stripe Checkout Session
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': int(total_price * 100),  # Stripe expects amount in cents
+                        'product_data': {
+                            'name': order.product.name,
+                        },
+                    },
+                    'quantity': order.quantity,
+                }],
+                mode='payment',
+                success_url=request.build_absolute_uri(reverse('payment_success', args=[order_id])),
+                cancel_url=request.build_absolute_uri(reverse('payment', args=[order_id])),
+            )
+            
+            return render(request, 'store/payment.html', {
+                'order': order, 
+                'total_price': total_price,
+                'stripe_public_key': settings.STRIPE_PUBLISHABLE_KEY,
+                'checkout_session_id': checkout_session.id
+            })
+        except Exception as e:
+            print(f"Stripe Checkout Error: {str(e)}")
+            return render(request, 'store/payment.html', {
+                'error': 'Unable to create Stripe payment session. You can still use alternative payment methods.',
+                'order': order,
+                'total_price': total_price
+            })
 
     def post(self, request, order_id):
-        payment_method = request.POST.get('payment_method')
         order = get_object_or_404(Order, id=order_id)
+        total_price = order.product.price * order.quantity
+        payment_method = request.POST.get('payment_method')
 
-        if payment_method:
-            try:
-                # Process payment logic here
-                order.status = True
-                order.payment_method = payment_method
-                order.save()
-                
-                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'Payment processed successfully!',
-                        'redirect_url': reverse('orders')
+        try:
+            # Handle Stripe payment if session ID is present
+            checkout_session_id = request.POST.get('checkout_session_id')
+            if checkout_session_id:
+                try:
+                    session = stripe.checkout.Session.retrieve(checkout_session_id)
+                    if session.payment_status == 'paid':
+                        order.status = True
+                        order.payment_method = 'stripe'
+                        order.save()
+                        
+                        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                            return JsonResponse({
+                                'status': 'success',
+                                'message': 'Payment processed successfully!',
+                                'redirect_url': reverse('orders')
+                            })
+                        return redirect('orders')
+                except Exception as stripe_error:
+                    print(f"Stripe payment verification error: {str(stripe_error)}")
+                    return render(request, 'store/payment.html', {
+                        'error': 'Stripe payment verification failed.',
+                        'order': order,
+                        'total_price': total_price
                     })
-                return redirect('orders')
-            except Exception as e:
+
+            # Handle alternative payment methods
+            if not payment_method:
                 if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                     return JsonResponse({
                         'status': 'error',
-                        'message': str(e)
+                        'message': 'Please select a payment method.'
                     }, status=400)
+                
                 return render(request, 'store/payment.html', {
-                    'error': str(e),
+                    'error': 'Please select a payment method.',
                     'order': order,
-                    'total_price': order.product.price * order.quantity,
+                    'total_price': total_price
                 })
+
+            # Process alternative payment methods
+            order.status = True
+            order.payment_method = payment_method
+            order.save()
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'message': f'Payment processed successfully via {payment_method}!',
+                    'redirect_url': reverse('orders')
+                })
+            return redirect('orders')
+
+        except Exception as e:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'error',
+                    'message': str(e)
+                }, status=400)
+            
+            return render(request, 'store/payment.html', {
+                'error': str(e),
+                'order': order,
+                'total_price': total_price
+            })
+
+# Add a success view
+def payment_success(request, order_id):
+    try:
+        order = get_object_or_404(Order, id=order_id)
         
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Please select a payment method.'
-            }, status=400)
+        # Update order status
+        order.status = True
+        order.payment_method = 'stripe'
+        order.save()
         
-        return render(request, 'store/payment.html', {
-            'error': 'Please select a payment method.',
+        # Redirect with success message
+        return render(request, 'store/payment_success.html', {
             'order': order,
-            'total_price': order.product.price * order.quantity,
+            'payment_status': 'success'
+        })
+    except Exception as e:
+        return render(request, 'store/payment_success.html', {
+            'order': order,
+            'payment_status': 'error',
+            'error_message': str(e)
         })
 
 

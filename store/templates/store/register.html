@@ -2,6 +2,20 @@
 
 {% load socialaccount %}
 
+{% block extra_css %}
+<style>
+    .password-toggle {
+        cursor: pointer;
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+    }
+
+    .password-toggle:hover {
+        color: var(--text-primary);
+    }
+</style>
+{% endblock extra_css %}
+
 {% block content %}
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
     <div class="col-md-6 col-lg-5">
@@ -103,6 +117,9 @@
                                    class="form-control border-start-0 ps-0" 
                                    placeholder="Password"
                                    required>
+                                <span class="input-group-text password-toggle" id="passwordToggle">
+                                    <i class="fas fa-eye-slash" id="passwordToggleIcon"></i>
+                                </span>
                         </div>
                     </div>
                     
@@ -140,4 +157,26 @@
         {% endif %}
     </div>
 </div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('passwordToggle');
+        const passwordToggleIcon = document.getElementById('passwordToggleIcon');
+
+        passwordToggle.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggleIcon.classList.remove('fa-eye-slash');
+                passwordToggleIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                passwordToggleIcon.classList.remove('fa-eye');
+                passwordToggleIcon.classList.add('fa-eye-slash');
+            }
+        });
+    });
+</script>
+{% endblock %}
 {% endblock %}

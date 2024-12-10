@@ -18,6 +18,7 @@ urlpatterns = [
     path('orders/', views.OrderView.as_view(), name='orders'),
     path('shop/', views.ShopView.as_view(), name='shop'),
     path('payment/<int:order_id>/', views.PaymentView.as_view(), name='payment'),
+    path('payment/success/<int:order_id>/', views.payment_success, name='payment_success'),
     path('logout/', views.logout, name='logout'),
 
     path('password-reset/', PasswordResetView.as_view(), name='password_reset'),

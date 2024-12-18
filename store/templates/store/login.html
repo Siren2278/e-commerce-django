@@ -39,6 +39,13 @@
                     <i class="fab fa-google me-2"></i>Continue with Google
                 </a>
             </div>
+
+            <!-- Error Message -->
+            {% if error %}
+            <div class="alert alert-danger mt-3 shadow-sm" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+            </div>
+            {% endif %}
             
             <!-- Card Body -->
             <div class="card-body p-5">
@@ -104,13 +111,6 @@
                 </form>
             </div>
         </div>
-        
-        <!-- Error Message -->
-        {% if error %}
-        <div class="alert alert-danger mt-3 shadow-sm" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
-        </div>
-        {% endif %}
     </div>
 </div>
 {% block extra_js %}

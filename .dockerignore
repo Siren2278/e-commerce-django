@@ -1,0 +1,27 @@
+# Version Control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv
+.env
+
+# Static and Media Files
+staticfiles
+mediafiles
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Logs
+*.log
+
+# Local development
+.DS_Store

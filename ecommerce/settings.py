@@ -8,6 +8,10 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY='django-insecure-)7&7&l_%gy+c2vy_om%oo95riw!@l6fs+h&q8c=_)5j4%wc3+p'
+ALLOWED_HOSTS=['*']
+DEBUG=1
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,9 +89,9 @@ DATABASES = {
 }
 
 # Security Settings
-SECRET_KEY = os.getenv('SECRET_KEY')
+""" SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', '0') == '1'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') """
 
 
 # Stripe configuration

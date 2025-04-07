@@ -81,12 +81,12 @@ LOGIN_URL = '/login/'
     }
 } """
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Security Settings
 """ SECRET_KEY = os.getenv('SECRET_KEY')
@@ -95,8 +95,8 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') """
 
 
 # Stripe configuration
-STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+# STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+# STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
 
 # Password validation
@@ -197,8 +197,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-import os
 
 # Media files settings
 MEDIA_URL = '/media/'  # URL to access media files
